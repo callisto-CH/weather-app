@@ -1,0 +1,28 @@
+----- HTML
+
+** Referencing image file paths in src/template.html?
+    - run : npm install --save-dev html-loader
+    - include this in modules.rules array in webpack.common.js:
+{
+    test: /\.html$/i,
+    loader: "html-loader",
+}
+
+----- JS
+
+** Referencing image file paths in js with imports?
+    - include this in modules.rules array in webpack.common.js:
+{
+  test: /\.(png|svg|jpg|jpeg|gif)$/i,
+  type: "asset/resource",
+}
+    - then wherever you want to import that image, do this
+import odinImage from "./odin.png";
+   
+const image = document.createElement("img");
+image.src = odinImage;
+
+** Need to transpile code so that older browsers can understand it, or so you can use new features not yet supported by browsers?
+
+https://github.com/babel/babel-loader
+https://blog.jakoblind.no/babel-preset-env/
