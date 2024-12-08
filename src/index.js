@@ -1,13 +1,38 @@
-import { fetchWeatherData, processWeatherData } from './weatherData.js';
+import "./styles.css";
+import { fetchWeatherData, processWeatherData } from "./data.js";
+import {
+  renderWeatherData,
+  unrenderWeatherData,
+  renderErrorMessage,
+  unrenderErrorMessage,
+  toggleImperialMetricUnits,
+  renderLoadingIcon,
+  unrenderLoadingIcon,
+} from "./render.js";
 
-const locationInput = document.querySelector("#location");
-const getWeatherBtn = document.querySelector("#get-weather");
-getWeatherBtn.addEventListener('click', () => {
+(function () {
+  const locationInput = document.querySelector("#location");
+  const getWeatherBtn = document.querySelector("#get-weather");
+  const toggleUnitsBtn = document.querySelector("#units-button");
+
+  toggleUnitsBtn.addEventListener("click", toggleImperialMetricUnits);
+
+  getWeatherBtn.addEventListener("click", () => {
+    unrenderWeatherData();
+    renderLoadingIcon();
     fetchWeatherData(locationInput.value)
-        .then((response) => {
-            return processWeatherData(response);
-        })
-        .then((data) => {
-            console.log(data);
-        })
-});
+      .then((response) => {
+        return processWeatherData(response);
+      })
+      .then((data) => {
+        renderWeatherData(data);
+        unrenderErrorMessage();
+      })
+      .catch((error) => {
+        renderErrorMessage(error);
+      })
+      .finally(() => {
+        unrenderLoadingIcon();
+      });
+  });
+})();
